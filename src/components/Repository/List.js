@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 
 import { listRepos } from '../../reducers/reducer';
+
+import styles from '../../../style';
 
 class List extends Component {
     componentDidMount() {
@@ -11,7 +13,7 @@ class List extends Component {
 
     renderItem = ({ item }) => (
         <TouchableOpacity
-            style={styles.item}
+            style={style.item}
             onPress={() => this.props.navigation.navigate('Details', { name: item.name })}
         >
             <Text>{item.name}</Text>
@@ -22,19 +24,17 @@ class List extends Component {
         const { repos } = this.props;
 
         return (
-            <FlatList
-                styles={styles.container}
-                data={repos}
-                renderItem={this.renderItem}
-            />
+            <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+                <FlatList
+                    data={repos}
+                    renderItem={this.renderItem}
+                />
+            </SafeAreaView>
         );
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1
-    },
+const style = StyleSheet.create({
     item: {
         padding: 16,
         borderBottomWidth: 1,

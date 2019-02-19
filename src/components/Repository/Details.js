@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
+import Moment from 'moment';
 
 import { getRepoDetail } from '../../reducers/reducer';
+
+import style from '../../../style';
 
 class Details extends Component {
     static navigationOptions = {
@@ -16,26 +19,31 @@ class Details extends Component {
 
     render() {
         const { repoInfo, loadingInfo } = this.props;
-        
+
         if (loadingInfo) return <Text>Loading...</Text>;
         console.log(repoInfo)
 
         const {
             name,
-            full_name,
+            updated_at,
             description,
             forks_count,
             stargazers_count
         } = repoInfo;
 
         return (
-            <View>
-                <Text>{name}</Text>
-                <Text>{full_name}</Text>
-                <Text>{description}</Text>
-                <Text>Forks: {forks_count}</Text>
-                <Text>Stars: {stargazers_count}</Text>
-            </View>
+            <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+                <View style={style.container}>
+                    <Text style={styles.title}>{name}</Text>
+                    <View style={styles.details_body}>
+                        <Text>About:</Text>
+                        <Text style={styles.paragraphs}>{description}</Text>
+                        <Text style={styles.paragraphs}>Forks: {forks_count}</Text>
+                        <Text style={styles.paragraphs}>Stars: {stargazers_count}</Text>
+                        <Text style={styles.paragraphs}>Last updated: {Moment(updated_at).format('d MMM YYYY hh:mm a')}</Text>
+                    </View>
+                </View>
+            </SafeAreaView>
         );
     }
 }
@@ -50,3 +58,18 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Details);
+
+const styles = StyleSheet.create({
+    title: {
+        textAlign: 'center',
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginTop: 20
+    },
+    details_body: {
+        margin: 20
+    },
+    paragraphs: {
+        paddingBottom: 16
+    }
+});
